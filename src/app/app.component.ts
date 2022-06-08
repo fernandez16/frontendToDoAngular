@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ToDoItem } from './toDoItem';
-import { ToDoList } from './toDoList';
+import { ServiceService } from './service.service';
+import { Task } from './task';
 
 @Component({
   selector: 'app-root',
@@ -8,32 +8,27 @@ import { ToDoList } from './toDoList';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  tasks: Task[];
+  showComplete: false;
+  taskText = new Task();
 
-  private list = new ToDoList('AA', [
-    new ToDoItem('Going to the grocery store', true),
-    new ToDoItem('Jogging'),
-    new ToDoItem('Traveling', false),
-  ]);
+  constructor(private service: ServiceService) {}
 
-  showComplete = false;
-
-  // username is an attribute that doesn´t have to be declared explicitly
-  get username(): string {
-    return this.list.user;
+  ngOnInit(): void {
+    this.service.getTasks().subscribe((data) => (this.tasks = data));
   }
 
-  get itemCount(): number {
-    return this.list.items.filter(item => item.complete).length;
+  createTask(task: Task) {
+    this.service.createTask(task).subscribe((data) => {
+      alert('Task added');
+      this.ngOnInit();
+    });
   }
 
-  get items(): readonly ToDoItem[]{
-    return this.list.items;
+  delete(task: Task): void {
+    this.service
+      .deleteTask(task)
+      .subscribe((data) => (this.tasks = this.tasks.filter((p) => p !== task)));
+    alert('Task deleted');
   }
-
-  addItem(newItem: string){
-    if (newItem!="") {
-      this.list.addItem(newItem)
-    }
-  }
-
 }

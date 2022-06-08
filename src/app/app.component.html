@@ -1,21 +1,22 @@
 <div>
   <h3 class="bg-primary text-center text-white p-2">
-    {{ username }} to do list
+    <!-- {{ username }}  -->
+    To Do List
   </h3>
 </div>
 
-<div>
+<!-- <div>
   <h2 class="mt-1">
-    {{ itemCount }} {{ showComplete ? "Incomplete Items" : "Complete Items" }}
+    {{ doneTasksCount }} {{ showComplete ? "Incomplete Items" : "Complete Items" }}
   </h2>
-</div>
+</div> -->
 
 <div class="container-fluid row">
   <div class="col">
-    <input class="form-control" placeholder="Enter your new task" #toDoText />
+    <input class="form-control" placeholder="Enter your new task" [(ngModel)]="taskText.name" />
   </div>
   <div class="col-auto">
-    <button class="btn btn-primary" (click)="addItem(toDoText.value)">+</button>
+    <button class="btn btn-primary" (click)="createTask(taskText)">+</button>
   </div>
 </div>
 
@@ -29,22 +30,29 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let qC of items; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ qC.task }}</td>
-        <td><input type="checkbox" [(ngModel)]="qC.complete" /></td>
-        <!-- <td [ngSwitch]="x.complete">
-        <span *ngSwitchCase="true">Yes</span>
-        <span *ngSwitchCase="false">No</span>
-        </td> -->
+      <tr *ngFor="let task of tasks">
+        <td>{{ task.id }}</td>
+        <td>{{ task.name }}</td>
+        <td><input type="checkbox" [(ngModel)]="task.done" /></td>
+        <td [ngSwitch]="task.done">
+          <span *ngSwitchCase="true">Yes</span>
+          <span *ngSwitchCase="false">No</span>
+          <span *ngSwitchCase="null">No</span>
+        </td>
+        <td>
+          <button class="btn btn-success" (click)="delete(task)">Delete</button>
+        </td>
+        <td>
+          <button class="btn btn-danger" (click)="delete(task)">Delete</button>
+        </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="bg-secondary text-white text-center p-2">
+<!-- <div class="bg-secondary text-white text-center p-2">
   <div class="form-check">
     <input class="form-check-input" type="checkbox" [(ngModel)]="showComplete">
-    <label class="form-check-lable" for="defaultCheck">Show incomplete tasks</label>
+    <label class="form-check-lable" for="defaultCheck"> Show complete items</label>
   </div>
-</div>
+</div> -->
