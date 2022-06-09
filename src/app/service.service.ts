@@ -22,4 +22,8 @@ export class ServiceService {
     return this.http.delete<Task>(this.Url + '/' + task.id);
   }
 
+  updateTask(task: Task) {
+    return this.http.put<Task>(this.Url + '/' + task.id, task);
+  }
+
 }

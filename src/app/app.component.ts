@@ -12,6 +12,8 @@ export class AppComponent {
   showComplete: false;
   taskText = new Task();
 
+  emptyString = "";
+
   constructor(private service: ServiceService) {}
 
   ngOnInit(): void {
@@ -20,7 +22,7 @@ export class AppComponent {
 
   createTask(task: Task) {
     this.service.createTask(task).subscribe((data) => {
-      alert('Task added');
+      // alert('Task added');
       this.ngOnInit();
     });
   }
@@ -29,6 +31,24 @@ export class AppComponent {
     this.service
       .deleteTask(task)
       .subscribe((data) => (this.tasks = this.tasks.filter((p) => p !== task)));
-    alert('Task deleted');
+    // alert('Task deleted');
+  }
+
+  update(task: Task) {
+    this.service.updateTask(task).subscribe((data) => {
+      task = data;
+      // alert('Task updated');
+      this.ngOnInit();
+    });
+  }
+
+  updateAll(tasks: Task[]) {
+    tasks.forEach((task) => {
+      this.service.updateTask(task).subscribe((data) => {
+        task = data;
+        // alert('Task updated');
+        this.ngOnInit();
+      });
+    });
   }
 }
