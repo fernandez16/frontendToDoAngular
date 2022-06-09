@@ -17,14 +17,14 @@
       type="text"
       class="form-control"
       placeholder="Enter your new task"
-      [(ngModel)]="taskText.name"
+      [(ngModel)]="newTask.name"
     />
   </div>
   <div class="col-auto">
     <button
       class="btn btn-primary"
-      (click)="createTask(taskText)"
-      [disabled]="taskText.name == null || taskText.name == emptyString"
+      (click)="createTask(newTask)"
+      [disabled]="!checkTaskNameValidity(newTask.name)"
     >
       +
     </button>
@@ -62,6 +62,10 @@
   <div class="row justify-content-center bg-secondary p-2">
     <button class="btn btn-success" (click)="updateAll(tasks)">
       Update List
+    </button>
+
+    <button class="btn btn-danger ml-2" (click)="deleteAll(tasks)">
+      Clear List
     </button>
   </div>
 </div>

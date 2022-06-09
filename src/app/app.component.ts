@@ -10,14 +10,23 @@ import { Task } from './task';
 export class AppComponent {
   tasks: Task[];
   showComplete: false;
-  taskText = new Task();
-
-  emptyString = "";
+  newTask = new Task();
 
   constructor(private service: ServiceService) {}
 
   ngOnInit(): void {
     this.service.getTasks().subscribe((data) => (this.tasks = data));
+  }
+
+  checkTaskNameValidity(taskName: string): boolean {
+    if (taskName != null && taskName != '') {
+      for (let i = 0; i < taskName.length; i++) {
+        if (taskName[i] != ' ') {
+          return true;
+        }
+      }
+      return false;
+    } else return false;
   }
 
   createTask(task: Task) {
@@ -32,6 +41,17 @@ export class AppComponent {
       .deleteTask(task)
       .subscribe((data) => (this.tasks = this.tasks.filter((p) => p !== task)));
     // alert('Task deleted');
+  }
+
+  deleteAll(tasks: Task[]): void {
+    tasks.forEach((task) => {
+      this.service
+        .deleteTask(task)
+        .subscribe(
+          (data) => (this.tasks = this.tasks.filter((p) => p !== task))
+        );
+      // alert('Task deleted');
+    });
   }
 
   update(task: Task) {
