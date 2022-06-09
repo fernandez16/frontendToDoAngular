@@ -24,16 +24,25 @@ export class AppComponent {
 
   get paginatedTasks(): Task[] {
     let pageIndex = (this.selectedPage - 1) * this.tasksPerPage;
+    if (this.showOnlyCompleteTasks) {
+      return this.tasks
+        .filter((task) => task.done)
+        .slice(pageIndex, pageIndex + this.tasksPerPage);
+    }
     return this.tasks.slice(pageIndex, pageIndex + this.tasksPerPage);
   }
 
   get pageNumbers(): number[] {
-    return Array(
-      Math.ceil(
-        this.tasks.length /
-          this.tasksPerPage
+    if (this.showOnlyCompleteTasks) {
+      return Array(
+        Math.ceil(
+          this.tasks.filter((task) => task.done).length / this.tasksPerPage
+        )
       )
-    )
+        .fill(0)
+        .map((x, i) => i + 1);
+    }
+    return Array(Math.ceil(this.tasks.length / this.tasksPerPage))
       .fill(0)
       .map((x, i) => i + 1);
   }
