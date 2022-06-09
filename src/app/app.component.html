@@ -1,13 +1,10 @@
 <div>
-  <h3 class="bg-primary text-center text-white p-2">
-    <!-- {{ username }}  -->
-    To Do List
-  </h3>
+  <h3 class="bg-primary text-center text-white p-2">To Do List</h3>
 </div>
 
 <!-- <div>
   <h2 class="mt-1">
-    {{ doneTasksCount }} {{ showComplete ? "Incomplete Items" : "Complete Items" }}
+    {{ doneTasksCount }} {{ showOnlyCompleteTasks ? "Incomplete Items" : "Complete Items" }}
   </h2>
 </div> -->
 
@@ -23,7 +20,7 @@
   <div class="col-auto">
     <button
       class="btn btn-primary"
-      (click)="createTask(newTask)"
+      (click)="add(newTask)"
       [disabled]="!checkTaskNameValidity(newTask.name)"
     >
       +
@@ -41,21 +38,30 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let task of tasks">
-        <td>{{ task.id }}</td>
-        <td>{{ task.name }}</td>
-        <td [ngSwitch]="task.done">
-          <span class="text-success" *ngSwitchCase="true">Yes</span>
-          <span class="text-danger" *ngSwitchCase="false">No</span>
-          <input class="ml-2" type="checkbox" [(ngModel)]="task.done" />
-        </td>
-        <!-- <td>
+      <ng-container *ngFor="let task of tasks">
+        <tr
+          *ngIf="
+            showOnlyCompleteTasks == false ||
+            (showOnlyCompleteTasks && task.done == true)
+          "
+        >
+          <td>{{ task.id }}</td>
+          <td>{{ task.name }}</td>
+          <td [ngSwitch]="task.done">
+            <span class="text-success" *ngSwitchCase="true">Yes</span>
+            <span class="text-danger" *ngSwitchCase="false">No</span>
+            <input class="ml-2" type="checkbox" [(ngModel)]="task.done" />
+          </td>
+          <!-- <td>
           <button class="btn btn-success" (click)="update(task)">Update</button>
         </td> -->
-        <td>
-          <button class="btn btn-danger" (click)="delete(task)">Delete</button>
-        </td>
-      </tr>
+          <td>
+            <button class="btn btn-danger" (click)="delete(task)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 
@@ -68,11 +74,16 @@
       Clear List
     </button>
   </div>
-</div>
-
-<!-- <div class="bg-secondary text-white text-center p-2">
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" [(ngModel)]="showComplete">
-    <label class="form-check-lable" for="defaultCheck"> Show complete items</label>
+  <div class="row justify-content-center bg-secondary p-2">
+    <div class="form-check mr-2">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        [(ngModel)]="showOnlyCompleteTasks"
+      />
+      <label class="form-check-lable text-light" for="defaultCheck">
+        Show complete items</label
+      >
+    </div>
   </div>
-</div> -->
+</div>

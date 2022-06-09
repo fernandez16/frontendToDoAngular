@@ -9,8 +9,12 @@ import { Task } from './task';
 })
 export class AppComponent {
   tasks: Task[];
-  showComplete: false;
   newTask = new Task();
+
+  showOnlyCompleteTasks = false;
+
+  selectedPage = 1;
+  tasksPerPage = 8;
 
   constructor(private service: ServiceService) {}
 
@@ -29,8 +33,8 @@ export class AppComponent {
     } else return false;
   }
 
-  createTask(task: Task) {
-    this.service.createTask(task).subscribe((data) => {
+  add(task: Task) {
+    this.service.addTask(task).subscribe((data) => {
       // alert('Task added');
       this.ngOnInit();
     });

@@ -14,7 +14,7 @@ export class ServiceService {
     return this.http.get<Task[]>(this.Url);
   }
 
-  createTask(task: Task) {
+  addTask(task: Task) {
     return this.http.post<Task>(this.Url, task);
   }
 
