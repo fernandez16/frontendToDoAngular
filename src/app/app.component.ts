@@ -14,12 +14,36 @@ export class AppComponent {
   showOnlyCompleteTasks = false;
 
   selectedPage = 1;
-  tasksPerPage = 8;
+  tasksPerPage = 4;
 
   constructor(private service: ServiceService) {}
 
   ngOnInit(): void {
     this.service.getTasks().subscribe((data) => (this.tasks = data));
+  }
+
+  get paginatedTasks(): Task[] {
+    let pageIndex = (this.selectedPage - 1) * this.tasksPerPage;
+    return this.tasks.slice(pageIndex, pageIndex + this.tasksPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    return Array(
+      Math.ceil(
+        this.tasks.length /
+          this.tasksPerPage
+      )
+    )
+      .fill(0)
+      .map((x, i) => i + 1);
+  }
+
+  get doneTasksCounter(): number {
+    return this.tasks.filter((task) => task.done).length;
+  }
+
+  get leftTasksCounter(): number {
+    return this.tasks.filter((task) => !task.done).length;
   }
 
   checkTaskNameValidity(taskName: string): boolean {
@@ -31,6 +55,15 @@ export class AppComponent {
       }
       return false;
     } else return false;
+  }
+
+  changePage(newPage: number) {
+    this.selectedPage = newPage;
+  }
+
+  changePageSize(newSize: number) {
+    this.tasksPerPage = Number(newSize);
+    this.changePage(1);
   }
 
   add(task: Task) {
